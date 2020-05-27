@@ -2,6 +2,7 @@ package yuw
 
 import (
 	"fmt"
+	_ "github.com/gowyu/yuw/modules"
 )
 
 type Engine struct {
