@@ -2,6 +2,7 @@ package modules
 
 import (
 	"errors"
+	"fmt"
 	"github.com/spf13/cast"
 	"strings"
 )
@@ -18,7 +19,7 @@ func NewUtils() *utils {
 
 func (util *utils) Panic(condition bool, content ... interface{}) {
 	if condition {
-		panic(cast.ToString(content))
+		panic(fmt.Sprint(content ...))
 	}
 }
 
