@@ -2,21 +2,27 @@ package modules
 
 import (
 	"errors"
-	"strings"
 	"github.com/spf13/cast"
+	"strings"
 )
 
-type Utils struct {
+type utils struct {
 
 }
 
-func NewUtils() *Utils {
-	return &Utils{
+func NewUtils() *utils {
+	return &utils{
 
 	}
 }
 
-func (util *Utils) StrContains(str string, src ...interface{}) (ok bool, err error) {
+func (util *utils) Panic(condition bool, content ... interface{}) {
+	if condition {
+		panic(content)
+	}
+}
+
+func (util *utils) StrContains(str string, src ...interface{}) (ok bool, err error) {
 	if len(src) < 1 {
 		err = errors.New("source is nil")
 		return

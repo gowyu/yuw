@@ -13,8 +13,9 @@ var (
 )
 
 type initialize struct {
+	fs *file
 	env *viper.Viper
-	util *Utils
+	util *utils
 }
 
 func NewInitialize() *initialize {
@@ -29,19 +30,19 @@ func (init *initialize) LoadInitializedFromYaml() *initialize {
 	init.env.SetConfigType(defaultType)
 
 	str := init.env.GetString("env")
-	if str == "" {
-		panic("--env=? is not configured")
-	}
+	init.util.Panic(str == "", []interface{}{"--env=? is not configured"})
 
-	if ok, _ := init.util.StrContains(str, defaultEnvironment ...); ok == false {
-		panic("--env=? must be in dev,stg,prd")
-	}
+	var ok bool
+	ok, _ = init.util.StrContains(str, defaultEnvironment ...)
+	init.util.Panic(ok, []interface{}{"--env=? must be in dev,stg,prd"})
+
+	ok = init.fs.IsExist(".env." + str + ".yaml")
+	init.util.Panic(ok, []interface{}{".env is not exist"})
 
 	init.env.SetConfigName(".env." + str)
 
-	if err := init.env.ReadInConfig(); err != nil {
-		panic(err.Error())
-	}
+	err := init.env.ReadInConfig()
+	init.util.Panic(err != nil, []interface{}{})
 
 	init.env.WatchConfig()
 	init.env.OnConfigChange(func (e fsnotify.Event){})
