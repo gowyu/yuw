@@ -18,7 +18,7 @@ func NewUtils() *utils {
 
 func (util *utils) Panic(condition bool, content ... interface{}) {
 	if condition {
-		panic(content)
+		panic(cast.ToString(content))
 	}
 }
 
