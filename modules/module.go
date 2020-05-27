@@ -39,7 +39,7 @@ func (module *module) cfg() {
 	err := init.env.BindPFlags(pflag.CommandLine)
 	module.util.Panic(
 		err != nil,
-		exceptions.TxT("yum^m"), err.Error(),
+		exceptions.TxT("yum^m", err.Error()),
 		exceptions.ErrPosition(),
 	)
 
