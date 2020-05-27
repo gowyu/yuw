@@ -37,16 +37,12 @@ func (module *module) cfg() {
 
 	init := NewInitialize()
 	err := init.env.BindPFlags(pflag.CommandLine)
-	module.util.Panic(
-		err != nil,
-		exceptions.TxT("yum^m", err.Error()),
-		exceptions.ErrPosition(),
+	module.util.Panic(err != nil,
+		exceptions.TxT("yum^m"), exceptions.ErrPosition(),
 	)
 
 	I = init.LoadInitializedFromYaml()
-	module.util.Panic(
-		I == nil,
-		exceptions.TxT("yum^m_a"),
-		exceptions.ErrPosition(),
+	module.util.Panic(I == nil,
+		exceptions.TxT("yum^m_a"), exceptions.ErrPosition(),
 	)
 }

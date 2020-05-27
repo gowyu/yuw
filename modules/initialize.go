@@ -57,7 +57,7 @@ func (init *initialize) LoadInitializedFromYaml() *initialize {
 	err := init.env.ReadInConfig()
 	init.util.Panic(
 		err != nil,
-		exceptions.TxT("yuw^m_init_d", err.Error()),
+		exceptions.TxT("yuw^m_init_d"),
 		exceptions.ErrPosition(),
 	)
 
