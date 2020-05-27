@@ -34,7 +34,7 @@ func (init *initialize) LoadInitializedFromYaml() *initialize {
 
 	var ok bool
 	ok, _ = init.util.StrContains(str, defaultEnvironment ...)
-	init.util.Panic(ok, []interface{}{"--env=? must be in dev,stg,prd"})
+	init.util.Panic(ok == false, []interface{}{"--env=? must be in dev,stg,prd"})
 
 	ok = init.fs.IsExist(".env." + str + ".yaml")
 	init.util.Panic(ok, []interface{}{".env is not exist"})
