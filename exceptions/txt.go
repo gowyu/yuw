@@ -1,10 +1,5 @@
 package exceptions
 
-import (
-	"fmt"
-	"github.com/spf13/cast"
-)
-
 var (
 	txt map[string]interface{} = map[string]interface{}{
 		"yum^default":	"unknown error, ",
@@ -22,16 +17,16 @@ func init() {
 
 }
 
-func TxT(tag string, content ... interface{}) (str string) {
+func TxT(tag string, content ... interface{}) (str interface{}) {
 	s, ok := txt[tag]
 	if ok {
-		str = cast.ToString(s)
+		str = s
 	} else {
-		str = cast.ToString(txt["yum^default"])
+		str = txt["yum^default"]
 	}
 
 	if len(content) > 0 {
-		str = str + ", " + fmt.Sprint(content ...)
+		str = append([]interface{}{str}, content ...)
 	}
 
 	return
