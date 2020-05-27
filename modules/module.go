@@ -1,11 +1,12 @@
 package modules
 
 import (
+	"github.com/gowyu/yuw/exceptions"
 	"github.com/spf13/pflag"
 )
 
 func init() {
-	module := new(module)
+	module := New()
 	module.cfg()
 }
 
@@ -17,7 +18,13 @@ type YuwInitialize struct {
 }
 
 type module struct {
+	util *Utils
+}
 
+func New() *module {
+	return &module {
+		util: NewUtils(),
+	}
 }
 
 func (module *module) cfg() {
@@ -30,12 +37,16 @@ func (module *module) cfg() {
 
 	init := NewInitialize()
 	err := init.env.BindPFlags(pflag.CommandLine)
-	if err != nil {
-		panic(err.Error())
-	}
+	module.util.Panic(
+		err != nil,
+		exceptions.TxT("yum^m"), err.Error(),
+		exceptions.ErrPosition(),
+	)
 
 	I = init.LoadInitializedFromYaml()
-	if I == nil {
-		panic("error initialize")
-	}
+	module.util.Panic(
+		I == nil,
+		exceptions.TxT("yum^m_a"),
+		exceptions.ErrPosition(),
+	)
 }

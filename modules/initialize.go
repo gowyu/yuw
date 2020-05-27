@@ -2,6 +2,7 @@ package modules
 
 import (
 	"github.com/fsnotify/fsnotify"
+	"github.com/gowyu/yuw/exceptions"
 	"github.com/spf13/viper"
 )
 
@@ -13,9 +14,9 @@ var (
 )
 
 type initialize struct {
-	fs *file
+	fs *File
 	env *viper.Viper
-	util *utils
+	util *Utils
 }
 
 func NewInitialize() *initialize {
@@ -30,22 +31,40 @@ func (init *initialize) LoadInitializedFromYaml() *initialize {
 	init.env.SetConfigType(defaultType)
 
 	str := init.env.GetString("env")
-	init.util.Panic(str == "", []interface{}{"--env=? is not configured"})
+	init.util.Panic(
+		str == "",
+		exceptions.TxT("yuw^m_init_a"),
+		exceptions.ErrPosition(),
+	)
 
 	var ok bool
 	ok, _ = init.util.StrContains(str, defaultEnvironment ...)
-	init.util.Panic(ok == false, []interface{}{"--env=? must be in dev,stg,prd"})
+	init.util.Panic(
+		ok == false,
+		exceptions.TxT("yuw^m_init_b"),
+		exceptions.ErrPosition(),
+	)
 
 	ok = init.fs.IsExist(".env." + str + ".yaml")
-	init.util.Panic(ok, []interface{}{".env is not exist"})
+	init.util.Panic(
+		ok == false,
+		exceptions.TxT("yuw^m_init_c"),
+		exceptions.ErrPosition(),
+	)
 
 	init.env.SetConfigName(".env." + str)
 
 	err := init.env.ReadInConfig()
-	init.util.Panic(err != nil, []interface{}{})
+	init.util.Panic(
+		err != nil,
+		exceptions.TxT("yuw^m_init_d"), err.Error(),
+		exceptions.ErrPosition(),
+	)
 
 	init.env.WatchConfig()
-	init.env.OnConfigChange(func (e fsnotify.Event){})
+	init.env.OnConfigChange(func (e fsnotify.Event){
+
+	})
 
 	return init
 }

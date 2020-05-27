@@ -2,15 +2,15 @@ package modules
 
 import "os"
 
-type file struct {
+type File struct {
 
 }
 
-func NewFile() *file {
-	return &file{}
+func NewFile() *File {
+	return &File{}
 }
 
-func (fs *file) IsExist(pathname string) (ok bool) {
+func (fs *File) IsExist(pathname string) (ok bool) {
 	_, err := os.Stat(pathname)
 	if err != nil {
 		if os.IsExist(err) {

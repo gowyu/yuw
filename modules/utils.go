@@ -1,31 +1,31 @@
 package modules
 
 import (
-	"errors"
 	"fmt"
+	"github.com/gowyu/yuw/exceptions"
 	"github.com/spf13/cast"
 	"strings"
 )
 
-type utils struct {
+type Utils struct {
 
 }
 
-func NewUtils() *utils {
-	return &utils{
+func NewUtils() *Utils {
+	return &Utils{
 
 	}
 }
 
-func (util *utils) Panic(condition bool, content ... interface{}) {
+func (util *Utils) Panic(condition bool, content ... interface{}) {
 	if condition {
 		panic(fmt.Sprint(content ...))
 	}
 }
 
-func (util *utils) StrContains(str string, src ...interface{}) (ok bool, err error) {
+func (util *Utils) StrContains(str string, src ...interface{}) (ok bool, err error) {
 	if len(src) < 1 {
-		err = errors.New("source is nil")
+		err = exceptions.Err("yuw^mod_util_a", exceptions.ErrPosition())
 		return
 	}
 
