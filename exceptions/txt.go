@@ -26,7 +26,7 @@ func TxT(tag string, content ... interface{}) (str interface{}) {
 	}
 
 	if len(content) > 0 {
-		str = append([]interface{}{str}, content ...)
+		str = append(content, str)
 	}
 
 	return
