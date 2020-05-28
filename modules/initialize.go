@@ -33,23 +33,20 @@ func (init *initialize) LoadInitializedFromYaml() *initialize {
 	str := init.env.GetString("env")
 	init.util.Panic(
 		str == "",
-		exceptions.TxT("yuw^m_init_a"),
-		exceptions.ErrPosition(),
+		exceptions.TxT("yuw^m_init_a"), exceptions.ErrPosition(),
 	)
 
 	var ok bool
 	ok, _ = init.util.StrContains(str, defaultEnvironment ...)
 	init.util.Panic(
 		ok == false,
-		exceptions.TxT("yuw^m_init_b"),
-		exceptions.ErrPosition(),
+		exceptions.TxT("yuw^m_init_b"), exceptions.ErrPosition(),
 	)
 
 	ok = init.fs.IsExist(".env." + str + ".yaml")
 	init.util.Panic(
 		ok == false,
-		exceptions.TxT("yuw^m_init_c"),
-		exceptions.ErrPosition(),
+		exceptions.TxT("yuw^m_init_c"), exceptions.ErrPosition(),
 	)
 
 	init.env.SetConfigName(".env." + str)
@@ -57,8 +54,7 @@ func (init *initialize) LoadInitializedFromYaml() *initialize {
 	err := init.env.ReadInConfig()
 	init.util.Panic(
 		err != nil,
-		exceptions.TxT("yuw^m_init_d"),
-		exceptions.ErrPosition(),
+		exceptions.TxT("yuw^m_init_d"), exceptions.ErrPosition(),
 	)
 
 	init.env.WatchConfig()

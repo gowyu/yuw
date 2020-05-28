@@ -7,9 +7,9 @@ import (
 
 var (
 	txt map[string]interface{} = map[string]interface{}{
-		"yum^default":	"unknown error, ",
+		"yum^default":	"unknown error",
 
-		"yuw^m": "error module, ",
+		"yuw^m": "error module",
 		"yuw^m_b": "error initialize",
 		"yuw^m_init_a": "config environment, go run ... --env=dev|stg|prd",
 		"yuw^m_init_b": "config environment, --env=dev|stg|prd",
