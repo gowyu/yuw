@@ -2,7 +2,7 @@ package modules
 
 import (
 	"github.com/fsnotify/fsnotify"
-	"github.com/gowyu/yuw/exceptions"
+	E "github.com/gowyu/yuw/exceptions"
 	"github.com/spf13/viper"
 )
 
@@ -15,50 +15,40 @@ var (
 
 type initialize struct {
 	fs *File
-	env *viper.Viper
+	Env *viper.Viper
 	util *Utils
 }
 
 func NewInitialize() *initialize {
 	return &initialize {
-		env: viper.New(),
+		Env: viper.New(),
 		util: NewUtils(),
 	}
 }
 
 func (init *initialize) LoadInitializedFromYaml() *initialize {
-	init.env.AddConfigPath(".")
-	init.env.SetConfigType(defaultType)
+	init.Env.AddConfigPath(".")
+	init.Env.SetConfigType(defaultType)
 
-	str := init.env.GetString("env")
-	init.util.Panic(
-		str == "",
-		exceptions.TxT("yuw^m_init_a"), exceptions.ErrPosition(),
-	)
+	str := init.Env.GetString("env")
+	E.ErrArray(&E.ErrType{"yuw^m_init_a":str == ""})
 
-	var ok bool
-	ok, _ = init.util.StrContains(str, defaultEnvironment ...)
-	init.util.Panic(
-		ok == false,
-		exceptions.TxT("yuw^m_init_b"), exceptions.ErrPosition(),
-	)
+	dir := ".env." + str
+	env := "./" + dir + "." + defaultType
 
-	ok = init.fs.IsExist(".env." + str + ".yaml")
-	init.util.Panic(
-		ok == false,
-		exceptions.TxT("yuw^m_init_c"), exceptions.ErrPosition(),
-	)
+	okEnv, _ := init.util.StrContains(str, defaultEnvironment ...)
+	E.ErrArray(&E.ErrType{"yuw^m_init_b":okEnv == false})
 
-	init.env.SetConfigName(".env." + str)
+	okDir, _ := init.fs.IsExists(env)
+	if okDir == false {
+		E.ErrPanic(init.fs.Create(env))
+	}
 
-	err := init.env.ReadInConfig()
-	init.util.Panic(
-		err != nil,
-		exceptions.TxT("yuw^m_init_d"), exceptions.ErrPosition(),
-	)
+	init.Env.SetConfigName(dir)
+	E.ErrPanic(init.Env.ReadInConfig())
 
-	init.env.WatchConfig()
-	init.env.OnConfigChange(func (e fsnotify.Event){
+	init.Env.WatchConfig()
+	init.Env.OnConfigChange(func (e fsnotify.Event){
 
 	})
 
@@ -67,16 +57,9 @@ func (init *initialize) LoadInitializedFromYaml() *initialize {
 
 func (init *initialize) Get(key string, val interface{}) (res interface{}) {
 	res = val
-	if init.env.IsSet(key) {
-		res = init.env.Get(key)
+	if init.Env.IsSet(key) {
+		res = init.Env.Get(key)
 	}
 
 	return
 }
-
-
-
-
-
-
-
